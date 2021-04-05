@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: qingfeng-auth
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8001
+      config:
+        server-addr: localhost:8001
+        group: DEFAULT_GROUP
+        prefix: qingfeng-auth
+        file-extension: yaml
+
+logging:
+  level:
+    com:
+      alibaba:
+        cloud:
+          nacos:
+            client:
+              NacosPropertySourceBuilder: error
+

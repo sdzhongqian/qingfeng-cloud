@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingfeng.system.mapper.RoleMapper">
+
+    <!--数据权限-->
+    <sql id="authPageSql">
+        <!-- 数据权限 -->
+        <if test="(obj.auth_organize_ids == null or obj.auth_organize_ids.size == 0) and (obj.auth_user != null and obj.auth_user != '')">
+            and a.create_user=#{obj.auth_user}
+        </if>
+        <if test="obj.auth_organize_ids != null and obj.auth_organize_ids.size > 0">
+            and (a.create_user=#{obj.auth_user} or a.create_organize in
+            <foreach collection="obj.auth_organize_ids" item="organize_id" open="(" separator="," close=")">
+                #{organize_id}
+            </foreach>
+            )
+        </if>
+    </sql>
+    <sql id="authObjSql">
+        <!-- 数据权限 -->
+        <if test="(auth_organize_ids == null or auth_organize_ids.size == 0) and (auth_user != null and auth_user != '')">
+            and a.create_user=#{auth_user}
+        </if>
+        <if test="auth_organize_ids != null and auth_organize_ids.size > 0">
+            and (a.create_user=#{auth_user} or a.create_organize in
+            <foreach collection="auth_organize_ids" item="organize_id" open="(" separator="," close=")">
+                #{organize_id}
+            </foreach>
+            )
+        </if>
+    </sql>
+
+    <!--查询分页列表-->
+    <select id="findListPage" parameterType="Role" resultType="Role">
+        select
+            a.id as "id",
+            a.type as "type",
+            a.name as "name",
+            a.short_name as "short_name",
+            a.status as "status",
+            a.order_by as "order_by",
+            a.remark as "remark",
+            a.create_time as "create_time",
+            a.create_user as "create_user",
+            a.create_organize as "create_organize",
+            a.update_user as "update_user",
+            a.update_time as "update_time"
+            from system_role a
+            where 1=1
+            <if test="obj.name != null and obj.name != ''">
+                and a.name like concat('%',concat(#{obj.name},'%'))
+            </if>
+            <if test="obj.short_name != null and obj.short_name != ''">
+                and a.short_name like concat('%',concat(#{obj.short_name},'%'))
+            </if>
+            <if test="obj.type != null and obj.type != ''">
+                and a.type = #{obj.type}
+            </if>
+            <if test="obj.status != null and obj.status != ''">
+                and a.status = #{obj.status}
+            </if>
+            <include refid="authPageSql"></include>
+            order by a.order_by+0 asc , a.create_time desc
+    </select>
+
+
+    <select id="findSimpleList" parameterType="com.qingfeng.utils.PageData" resultType="Role">
+        select
+        a.id as "id",
+        a.name as "name"
+        from system_role a
+        where 1=1
+        <if test="create_user != null and create_user != ''">
+            and (a.create_user=#{create_user} or a.type='1')
+        </if>
+        <if test="user_id != null and user_id != ''">
+            and a.id not in (select role_id from system_user_role where user_id=#{user_id})
+        </if>
+        <if test="organize_id != null and organize_id != ''">
+            and a.id not in (select role_id from system_organize_role where organize_id=#{organize_id})
+        </if>
+        <if test="status != null and status != ''"><!-- 状态 -->
+            and a.status = #{status}
+        </if>
+        order by a.order_by+0 asc, a.create_time desc
+    </select>
+
+</mapper>

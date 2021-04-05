@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.qingfeng</groupId>
+  <artifactId>qingfeng-cloud</artifactId>
+  <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>qingfeng-common</module>
+        <module>qingfeng-auth</module>
+        <module>qingfeng-gateway</module>
+        <module>qingfeng-server</module>
+        <module>qingfeng-monitor</module>
+    </modules>
+
+    <packaging>pom</packaging>
+
+    <name>qingfeng-cloud</name>
+    <description>qingfeng-cloud 微服务管理系统</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <!--升级 -->
+        <version>2.2.0.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <!--升级 -->
+        <spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
+        <!--升级 -->
+        <com-alibaba-cloud.version>2.1.1.RELEASE</com-alibaba-cloud.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- 升级，替换为 com.alibaba.cloud -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${com-alibaba-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

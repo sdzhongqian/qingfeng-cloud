@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingfeng.mapper.TimTaskMapper">
+
+	<!--查询分页列表-->
+	<select id="findListPage" parameterType="TimTask" resultType="TimTask">
+		select
+			job.job_name as "job_name",
+			job.job_group as "job_group",
+			job.description as "description",
+			job.job_class_name as "job_class_name",
+			cron.cron_expression as "cron_expression",
+			tri.trigger_name as "trigger_name",
+			tri.trigger_state as "trigger_state",
+			tri.start_time as "start_time",
+			job.job_name as "old_job_name",
+			job.job_group as "old_job_group"
+			from qrtz_job_details job
+			left join qrtz_triggers tri on job.job_name = tri.job_name
+			left join qrtz_cron_triggers cron on cron.trigger_name = tri.trigger_name
+			where tri.trigger_type = 'CRON'
+			<if test="obj.job_name != null and obj.job_name != ''">
+				and job.job_name like concat('%',concat(#{obj.job_name},'%'))
+			</if>
+			<if test="obj.job_group != null and obj.job_group != ''">
+				and job.job_group like concat('%',concat(#{obj.job_group},'%'))
+			</if>
+			order by tri.start_time desc
+	</select>
+
+
+</mapper>

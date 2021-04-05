@@ -1,0 +1,57 @@
+server:
+  port: 8202
+
+spring:
+  application:
+    name: qingfeng-Server-Test
+  boot:
+    admin:
+      client:
+        url: http://localhost:8401
+        username: qingfeng
+        password: 123456
+  zipkin:
+    sender:
+      type: rabbit
+  sleuth:
+    sampler:
+      probability: 1
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: qingfeng
+    password: 123456
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceAutoConfiguration
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8001
+
+security:
+  oauth2:
+    resource:
+      id: ${spring.application.name}
+      user-info-uri: http://localhost:8301/auth/user
+
+feign:
+  hystrix:
+    enabled: true
+hystrix:
+  shareSecurityContext: true
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: "qingfeng-Server-Test测试服务模块"
+    version: "1.0-SNAPSHOT"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS

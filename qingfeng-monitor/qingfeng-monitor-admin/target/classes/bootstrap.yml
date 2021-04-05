@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: qingfeng-Monitor-Admin
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8001
+        group: DEFAULT_GROUP
+        prefix: qingfeng-monitor-admin
+        file-extension: yaml

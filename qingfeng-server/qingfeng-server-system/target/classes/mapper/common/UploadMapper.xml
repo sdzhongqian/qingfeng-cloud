@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingfeng.common.mapper.UploadMapper">
+
+    <!--数据权限-->
+    <sql id="authPageSql">
+        <!-- 数据权限 -->
+        <if test="(obj.auth_organize_ids == null or obj.auth_organize_ids.size == 0) and (obj.auth_user != null and obj.auth_user != '')">
+            and a.create_user=#{obj.auth_user}
+        </if>
+        <if test="obj.auth_organize_ids != null and obj.auth_organize_ids.size > 0">
+            and (a.create_user=#{obj.auth_user} or a.create_organize in
+            <foreach collection="obj.auth_organize_ids" item="organize_id" open="(" separator="," close=")">
+                #{organize_id}
+            </foreach>
+            )
+        </if>
+    </sql>
+    <sql id="authPdSql">
+        <!-- 数据权限 -->
+        <if test="(auth_organize_ids == null or auth_organize_ids.size == 0) and (auth_user != null and auth_user != '')">
+            and a.create_user=#{auth_user}
+        </if>
+        <if test="auth_organize_ids != null and auth_organize_ids.size > 0">
+            and (a.create_user=#{auth_user} or a.create_organize in
+            <foreach collection="auth_organize_ids" item="organize_id" open="(" separator="," close=")">
+                #{organize_id}
+            </foreach>
+            )
+        </if>
+    </sql>
+
+
+
+</mapper>

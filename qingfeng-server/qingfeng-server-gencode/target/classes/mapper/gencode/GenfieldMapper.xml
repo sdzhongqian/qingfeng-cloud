@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingfeng.mapper.GenfieldMapper">
+
+
+    <!--查询字段表分页列表-->
+    <select id="findFieldList" parameterType="com.qingfeng.utils.PageData" resultType="Genfield">
+        select
+        a.id as "id",
+        a.type as "type",
+        a.table_id as "table_id",
+        a.field_name as "field_name",
+        a.field_comment as "field_comment",
+        a.field_type as "field_type",
+        a.field_operat as "field_operat",
+        a.field_list as "field_list",
+        a.field_query as "field_query",
+        a.query_type as "query_type",
+        a.verify_rule as "verify_rule",
+        a.show_type as "show_type",
+        a.option_content as "option_content",
+        a.default_value as "default_value",
+        a.order_by as "order_by",
+        a.remark as "remark",
+        a.create_time as "create_time",
+        a.create_user as "create_user",
+        a.create_organize as "create_organize",
+        a.update_user as "update_user",
+        a.update_time as "update_time"
+        from system_genfield a
+        where a.table_id = #{table_id}
+        <if test="excludeField != null and excludeField.size > 0">
+            and a.field_name not in
+            <foreach collection="excludeField" item="field_name" open="(" separator="," close=")">
+                #{field_name}
+            </foreach>
+        </if>
+        order by a.order_by+0 asc
+    </select>
+
+
+</mapper>
